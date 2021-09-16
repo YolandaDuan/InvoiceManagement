@@ -18,20 +18,27 @@ export const App = () => {
   const invoices = useTracker(() => InvoicesCollection.find({}, { sort: { createdAt: -1 } }).fetch());
 
   return(
-    <div>
-      <h1>Invoice Management</h1>
-  
-      <InvoiceForm/>
+    <div className="app">
+      <heaeder>
+        <div className="app-bar">
+          <div className="app-header">
+            <h1>Invoice Management</h1>
+          </div>
+        </div>
+      </heaeder>
+     
+      <div className="main">
+        <InvoiceForm/>
 
-      <ul>
-        { invoices.map(invoice => <Invoice 
-        key={invoice._id} 
-        invoice={ invoice } 
-        onCheckboxClick={toggleChecked}
-        onDeleteClick={deleteInvoice}  
-        />) }
-      </ul>
-  
+        <ul className="invoices">
+          { invoices.map(invoice => <Invoice 
+          key={invoice._id} 
+          invoice={ invoice } 
+          onCheckboxClick={toggleChecked}
+          onDeleteClick={deleteInvoice}  
+          />) }
+        </ul>
+      </div>  
     </div>
   );
 }
