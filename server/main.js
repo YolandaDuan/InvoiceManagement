@@ -5,7 +5,7 @@ const insertInvoice = invoiceText => InvoicesCollection.insert({text: invoiceTex
 
 Meteor.startup(() => {
   // If the Links collection is empty, add some data.
-  if (InvoicesCollection.find().count() === 0) {
+  if (InvoicesCollection.find().count() != 0) {
     [
       'invoice new',
       'invoice 2',
