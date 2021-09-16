@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { InvoicesCollection } from '../api/InvoicesCollection';
 
 export const InvoiceForm = () => {
