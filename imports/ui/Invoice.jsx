@@ -5,7 +5,7 @@ export const Invoice = ({ invoice, onCheckboxClick, onDeleteClick }) => {
     <li>
         <input
             type="checkbox"
-            checked={!!invoice.isChecked}
+            paid={!!invoice.isPaid}
             onClick={() => onCheckboxClick(invoice)}
             readOnly
         />

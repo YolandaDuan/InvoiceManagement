@@ -103,6 +103,15 @@ header {
   background-color: #2d99d8;
 }
 
+.filter {
+  display: flex;
+  justify-content: center;
+}
+
+.filter > button {
+  background-color: #62807e;
+}
+
 .invoices {
   list-style-type: none;
   padding-inline-start: 0;
