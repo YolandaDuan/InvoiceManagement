@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import { Meteor } from 'meteor/meteor';
+import React, { Fragment, useState } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 import { InvoicesCollection } from '../api/InvoicesCollection';
 import { Invoice } from './Invoice'
 import { InvoiceForm } from './InvoiceForm';
+import { LoginForm } from './LoginForm';
 
 const togglePaid = ({ _id, isPaid }) => {
   InvoicesCollection.update(_id, {
@@ -15,19 +17,37 @@ const togglePaid = ({ _id, isPaid }) => {
 const deleteInvoice = ({ _id }) => InvoicesCollection.remove(_id);
 
 export const App = () => {
+  const user = useTracker(() => Meteor.user());
+
+  const logout = () => Meteor.logout();
+  
   const hidePaidFilter = { isPaid : { $ne: true }};
   const [hidePaid, setHidePaid] = useState(false);
 
-  const invoices = useTracker(() => 
-    InvoicesCollection.find(hidePaid ? hidePaidFilter : {}, { 
-      sort: { createdAt: -1 }, 
-    }).fetch()
-  );
- 
+  const userFilter = user ? { userId: user._id } : {};
 
-  const pendingInvoicesCount = useTracker(() =>
-    InvoicesCollection.find(hidePaidFilter).count()
-  );
+  const pendingOnlyFilter = { ...hidePaidFilter, ...userFilter };
+
+  const invoices = useTracker(() => {
+    if(!user) {
+      return [];
+    }
+
+    return InvoicesCollection.find(
+      hidePaid ? pendingOnlyFilter : userFilter, 
+      { 
+      sort: { createdAt: -1 }, 
+      }
+    ).fetch();
+  });
+ 
+  const pendingInvoicesCount = useTracker(() => {
+    if (!user) {
+      return 0;
+    }
+  
+    return InvoicesCollection.find(pendingOnlyFilter).count();
+  });
 
   const pendingInvoicesTitle = `${
     pendingInvoicesCount ? ` (${pendingInvoicesCount})`: ''
@@ -47,21 +67,33 @@ export const App = () => {
       </heaeder>
      
       <div className="main">
-        <InvoiceForm/>
-        <div className="filter">
-          <button onClick={() => setHidePaid(!hidePaid)}>
-            {hidePaid ? 'Show All' : 'Hide Paid'}
-          </button>
-        </div>
+        {user ? (
+          <Fragment>
+            <div className="user" onClick={logout}>
+              {user.username}
+            </div>
+            <InvoiceForm user={user}/>
+            
+            <div className="filter">
+              <button onClick={() => setHidePaid(!hidePaid)}>
+                {hidePaid ? 'Show All' : 'Hide Paid'}
+              </button>
+            </div>
 
-        <ul className="invoices">
-          { invoices.map(invoice => <Invoice 
-          key={invoice._id} 
-          invoice={ invoice } 
-          onCheckboxClick={togglePaid}
-          onDeleteClick={deleteInvoice}  
-          />) }
-        </ul>
+            <ul className="invoices">
+              {invoices.map(invoice => (
+                <Invoice 
+                  key={invoice._id} 
+                  invoice={ invoice } 
+                  onCheckboxClick={togglePaid}
+                  onDeleteClick={deleteInvoice}  
+              />
+              ))}
+            </ul>
+          </Fragment>
+        ) : (
+          <LoginForm />
+        )}
       </div>  
     </div>
   );

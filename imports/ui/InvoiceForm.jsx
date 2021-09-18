@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { InvoicesCollection } from '../api/InvoicesCollection';
 
-export const InvoiceForm = () => {
-    const [text, setText] = useState("");
+export const InvoiceForm = ({ user }) => {
+    const [text, setText] = useState('');
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -11,7 +11,8 @@ export const InvoiceForm = () => {
 
         InvoicesCollection.insert({
             text: text.trim(),
-            createdAt: new Date()
+            createdAt: new Date(),
+            userId: user._id
         });
 
         setText("");
