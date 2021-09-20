@@ -12,7 +12,6 @@ const insertInvoice = (invoiceText, user) =>
 const SEED_USERNAME = 'yolanda';
 const SEED_PASSWORD = 'duan';
 
-
 Meteor.startup(() => {
   if(!Accounts.findUserByUsername(SEED_USERNAME)) {
     Accounts.createUser({

@@ -55,7 +55,7 @@ export const App = () => {
 
   return(
     <div className="app">
-      <heaeder>
+      <header>
         <div className="app-bar">
           <div className="app-header">
             <h1>
@@ -64,13 +64,13 @@ export const App = () => {
             </h1>
           </div>
         </div>
-      </heaeder>
+      </header>
      
       <div className="main">
         {user ? (
           <Fragment>
             <div className="user" onClick={logout}>
-              {user.username}
+              {user.username} 👸
             </div>
             <InvoiceForm user={user}/>
             
