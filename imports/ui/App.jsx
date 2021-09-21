@@ -1,52 +1,31 @@
 import { Meteor } from 'meteor/meteor';
 import React, { Fragment, useState } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
-import { InvoicesCollection } from '../api/InvoicesCollection';
 import { Invoice } from './Invoice'
 import { InvoiceForm } from './InvoiceForm';
 import { LoginForm } from './LoginForm';
-
-const togglePaid = ({ _id, isPaid }) => {
-  InvoicesCollection.update(_id, {
-    $set: {
-      isPaid: !isPaid
-    }
-  })
-};
-
-const deleteInvoice = ({ _id }) => InvoicesCollection.remove(_id);
+import { invoicesRepository } from '../api/InvoicesRepository';
 
 export const App = () => {
   const user = useTracker(() => Meteor.user());
 
   const logout = () => Meteor.logout();
   
-  const hidePaidFilter = { isPaid : { $ne: true }};
   const [hidePaid, setHidePaid] = useState(false);
-
-  const userFilter = user ? { userId: user._id } : {};
-
-  const pendingOnlyFilter = { ...hidePaidFilter, ...userFilter };
 
   const invoices = useTracker(() => {
     if(!user) {
       return [];
     }
 
-    return InvoicesCollection.find(
-      hidePaid ? pendingOnlyFilter : userFilter, 
-      { 
-      sort: { createdAt: -1 }, 
-      }
-    ).fetch();
+    return invoicesRepository.findAll(user, hidePaid);
   });
  
   const pendingInvoicesCount = useTracker(() => {
     if (!user) {
       return 0;
     }
-  
-    return InvoicesCollection.find(pendingOnlyFilter).count();
+    return invoicesRepository.pendingCount(user)
   });
 
   const pendingInvoicesTitle = `${
@@ -85,8 +64,8 @@ export const App = () => {
                 <Invoice 
                   key={invoice._id} 
                   invoice={ invoice } 
-                  onCheckboxClick={togglePaid}
-                  onDeleteClick={deleteInvoice}  
+                  onCheckboxClick={invoicesRepository.togglePaid}
+                  onDeleteClick={invoicesRepository.deleteInvoice}  
               />
               ))}
             </ul>

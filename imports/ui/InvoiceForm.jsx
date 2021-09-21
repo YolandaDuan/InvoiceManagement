@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { InvoicesCollection } from '../api/InvoicesCollection';
+import { invoicesRepository } from '../api/InvoicesRepository';
 
 export const InvoiceForm = ({ user }) => {
     const [text, setText] = useState('');
@@ -9,11 +9,11 @@ export const InvoiceForm = ({ user }) => {
 
         if(!text) return;
 
-        InvoicesCollection.insert({
+        invoicesRepository.insert({
             text: text.trim(),
             createdAt: new Date(),
             userId: user._id
-        });
+        })
 
         setText("");
     };
