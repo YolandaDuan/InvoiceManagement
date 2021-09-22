@@ -33,7 +33,7 @@ export const LoginForm = () => {
                 />
              
                 <button type="submit">Log In</button>
-                <button>Sign Up</button>            
+                <button type="button">Sign Up</button>            
             </div>   
         </form>
     );
