@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import React, { Fragment, useState } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
-import { InvoicesCollection } from '../api/InvoicesCollection';
+import { InvoicesCollection } from '../db/InvoicesCollection';
 import { Invoice } from './Invoice'
 import { InvoiceForm } from './InvoiceForm';
 import { LoginForm } from './LoginForm';

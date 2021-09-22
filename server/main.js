@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
-import { InvoicesCollection } from '/imports/api/InvoicesCollection';
+import { InvoicesCollection } from '/imports/db/InvoicesCollection';
 import '/imports/api/invoicesMethods';
 
 const insertInvoice = (invoiceText, user) => 

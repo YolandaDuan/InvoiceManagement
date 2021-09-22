@@ -1,5 +1,5 @@
 import { check } from 'meteor/check';
-import { InvoicesCollection } from './InvoicesCollection';
+import { InvoicesCollection } from '../db/InvoicesCollection';
 
 Meteor.methods({
     'invoices.insert'(text) {
