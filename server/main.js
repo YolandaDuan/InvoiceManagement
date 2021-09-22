@@ -1,6 +1,13 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
-import { invoicesRepository } from '../imports/api/InvoicesRepository';
+import { InvoicesCollection } from '/imports/api/InvoicesCollection';
+
+const insertInvoice = (invoiceText, user) => 
+  InvoicesCollection.insert({
+    text: invoiceText,
+    userId: user._id,
+    createAt: new Date(),
+  });
 
 const SEED_USERNAME = 'yolanda';
 const SEED_PASSWORD = 'duan';
@@ -16,11 +23,11 @@ Meteor.startup(() => {
   const user = Accounts.findUserByUsername(SEED_USERNAME);
   
   // If the Links collection is empty, add some data.
-  if (invoicesRepository.invoicesCount() === 0) {
+  if (InvoicesCollection.find().count() === 0) {
     [
       'invoice 1, init',
       'invoice 2',
       'invoice 3'
-    ].forEach(invoiceText => invoicesRepository.insertInvoice(invoiceText, user));
+    ].forEach(invoiceText => insertInvoice(invoiceText, user));
   }
 });

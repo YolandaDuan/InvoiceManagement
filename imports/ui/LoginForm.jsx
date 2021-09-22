@@ -10,7 +10,6 @@ export const LoginForm = () => {
 
         Meteor.loginWithPassword(username, password);
     };
-    const hello = () => alert("hello");
 
     return (
         <form onSubmit={submit} className="login-form">
@@ -34,7 +33,7 @@ export const LoginForm = () => {
                 />
              
                 <button type="submit">Log In</button>
-                <button onClick={hello} type="button">Sign Up</button>            
+                <button>Sign Up</button>            
             </div>   
         </form>
     );
