@@ -7,14 +7,10 @@ import { InvoiceForm } from './InvoiceForm';
 import { LoginForm } from './LoginForm';
 
 const togglePaid = ({ _id, isPaid }) => {
-  InvoicesCollection.update(_id, {
-    $set: {
-      isPaid: !isPaid
-    }
-  })
+  Meteor.call('invoices.setIsPaid', _id, !isPaid)
 };
 
-const deleteInvoice = ({ _id }) => InvoicesCollection.remove(_id);
+const deleteInvoice = ({ _id }) => Meteor.call('invoices.remove', _id);
 
 export const App = () => {
   const user = useTracker(() => Meteor.user());
@@ -72,7 +68,7 @@ export const App = () => {
             <div className="user" onClick={logout}>
               {user.username} 👸
             </div>
-            <InvoiceForm user={user}/>
+            <InvoiceForm/>
             
             <div className="filter">
               <button onClick={() => setHidePaid(!hidePaid)}>
