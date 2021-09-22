@@ -48,14 +48,6 @@ export const App = () => {
     return { invoices, pendingInvoicesCount };
 
   });
- 
-  const pendingInvoicesCount = useTracker(() => {
-    if (!user) {
-      return 0;
-    }
-  
-    return InvoicesCollection.find(pendingOnlyFilter).count();
-  });
 
   const pendingInvoicesTitle = `${
     pendingInvoicesCount ? ` (${pendingInvoicesCount})`: ''
@@ -87,6 +79,8 @@ export const App = () => {
                 {hidePaid ? 'Show All' : 'Hide Paid'}
               </button>
             </div>
+
+            { isLoading && <div className="loading">loading...</div> }
 
             <ul className="invoices">
               {invoices.map(invoice => (

@@ -23,6 +23,12 @@ Meteor.methods({
             throw new Meteor.Error('Not authorized.');
         }
 
+        const invoice = InvoicesCollection.findOne({ _id: invoiceId, userId: this.userId });
+
+        if (!invoice) {
+            throw new Meteor.Error('Access denied.');
+        }
+
         InvoicesCollection.remove(invoiceId);
     },
 
@@ -34,9 +40,15 @@ Meteor.methods({
             throw new Meteor.Error('Not authorized.');
         }
 
+        const invoice = InvoicesCollection.findOne({ _id: invoiceId, userId: this.userId });
+
+        if (!invoice) {
+            throw new Meteor.Error('Access denied.');
+        }
+
         InvoicesCollection.update(invoiceId, {
             $set: {
-                isPaid
+                isPaid,
             }
         });
     }
