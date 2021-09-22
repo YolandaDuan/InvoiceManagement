@@ -24,17 +24,29 @@ export const App = () => {
 
   const pendingOnlyFilter = { ...hidePaidFilter, ...userFilter };
 
-  const invoices = useTracker(() => {
-    if(!user) {
-      return [];
+  const { invoices, pendingInvoicesCount, isLoading } = useTracker(() => {
+    const noDataAvailable = { invoices: [], pendingInvoicesCount: 0 };
+    if(!Meteor.user()) {
+      return noDataAvailable;
     }
 
-    return InvoicesCollection.find(
+    const handler = Meteor.subscribe('invoices');
+
+    if(!handler.ready()) {
+      return { ...noDataAvailable, isLoading: true };
+    }
+
+    const invoices = InvoicesCollection.find(
       hidePaid ? pendingOnlyFilter : userFilter, 
       { 
       sort: { createdAt: -1 }, 
       }
     ).fetch();
+
+    const pendingInvoicesCount = InvoicesCollection.find(pendingOnlyFilter).count();
+
+    return { invoices, pendingInvoicesCount };
+
   });
  
   const pendingInvoicesCount = useTracker(() => {
